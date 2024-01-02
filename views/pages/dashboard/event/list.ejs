@@ -1,0 +1,239 @@
+<nav
+  class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl"
+  id="navbarBlur"
+  data-scroll="false"
+>
+  <div class="container-fluid py-1 px-3">
+    <nav aria-label="breadcrumb">
+      <h6 class="font-weight-bolder text-white mb-0">Dashboard</h6>
+    </nav>
+    <div
+      class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4"
+      id="navbar"
+    >
+      <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+        <form action="/search/event" method="get">
+        <div class="input-group">
+          <span class="input-group-text text-body"
+            ><i class="fas fa-search" aria-hidden="true"></i
+          ></span>
+          <input type="text" class="form-control" name="search" placeholder="Type here..." />
+        </div>
+      </form>
+      </div>
+      <ul class="navbar-nav justify-content-end">
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="row">
+  <div class="col-12">
+    <div class="card mb-4">
+      <div class="card-header pb-0">
+        <div class="d-flex justify-content-between">
+          <h6>List Event</h6>
+          <button
+            type="button"
+            class="btn bg-gradient-primary"
+            data-bs-toggle="modal"
+            data-bs-target="#exampleModal"
+          >
+            Tambah Event
+          </button>
+        </div>
+      </div>
+      <div class="card-body px-0 pt-0 pb-2">
+        <div class="table-responsive p-0">
+          <table class="table align-items-center justify-content-center mb-0">
+            <thead>
+              <tr>
+                <th
+                  class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
+                >
+                  Nama Event
+                </th>
+                <th
+                  class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
+                >
+                  Lokasi Event
+                </th>
+                <th
+                  class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
+                >
+                  Tanggal Mulai - Tanggal Selesai
+                </th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% events.forEach(event => { %>
+              <tr>
+                <td>
+                  <div class="d-flex px-2">
+                    <div class="my-auto">
+                      <h6 class="mb-0 text-sm"><%= event.nama_event %></h6>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <p class="text-sm font-weight-bold mb-0">
+                    <%= event.lokasi_event %>
+                  </p>
+                </td>
+                <td>
+                  <p class="text-sm font-weight-bold mb-0">
+                    <%= event.tgl_mulaievent.toLocaleDateString('el-GR') + ' - '
+                    + event.tgl_selesaievent.toLocaleDateString('el-GR') %>
+                  </p>
+                </td>
+                <td class="">
+                  <button
+                    class="btn btn-warning"
+                    onclick="editEvent('<%= event.id %>')"
+                  >
+                    Edit
+                  </button>
+                  <form action="/event/delete" method="post">
+                    <input type="hidden" value="<%= event.id  %>" name="id" />
+                    <button type="submit" class="btn btn-danger">Hapus</button>
+                  </form>
+                </td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Tambah Event</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="/event/store" method="post" >
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label for="namaEvent">Nama Event</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="namaEvent"
+                  name="namaEvent"
+                  placeholder="Wibu Fest"
+                />
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label for="lokasiEvent">Lokasi Event</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="lokasiEvent"
+                  name="lokasiEvent"
+                  placeholder="Living World"
+                />
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label for="tanggal_event">Tanggal Mulai Event</label>
+                <input
+                  type="datetime-local"
+                  class="form-control"
+                  id="tanggal_event"
+                  name="tanggal_event"
+                  placeholder="Wibu Fest"
+                />
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label for="tanggal_selesai">Tanggal Akhir Event</label>
+                <input
+                  type="datetime-local"
+                  class="form-control"
+                  id="tanggal_selesai"
+                  name="tanggal_selesai"
+                  placeholder="Wibu Fest"
+                />
+              </div>
+            </div>
+            
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn bg-gradient-secondary"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+          <button type="submit" class="btn bg-gradient-primary">
+            Save changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+<!-- Initialize Quill editor -->
+<script>
+
+  function editEvent(id) {
+    fetch(`/event/${id}`)
+      .then((response) => response.json())
+      .then((res) => {
+        $("input[name='namaEvent']").val(res.nama_event);
+        $("input[name='lokasiEvent']").val(res.lokasi_event);
+        $("input[name='tanggal_event']").val(
+          new Date(res.tgl_mulaievent).toISOString().slice(0, 16)
+        );
+        $("input[name='tanggal_selesai']").val(
+          new Date(res.tgl_selesaievent).toISOString().slice(0, 16)
+        );
+        $("#exampleModal form").attr("action", `/event/update/${id}`);
+        $("#exampleModal").modal("show");
+      })
+      .catch((error) => console.error("Error fetching event data:", error));
+  }
+</script>
+
+<% if(messages.success){ %>
+<script>
+  Toastify({
+    text: "<%= messages.success %>",
+    className: "success",
+    style: {
+      background: "linear-gradient(to right, #00b09b, #00b09b)",
+    },
+  }).showToast();
+</script>
+<% } %>

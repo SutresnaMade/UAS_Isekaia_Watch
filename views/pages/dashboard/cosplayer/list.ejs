@@ -1,0 +1,222 @@
+
+<nav
+  class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl"
+  id="navbarBlur"
+  data-scroll="false"
+>
+  <div class="container-fluid py-1 px-3">
+    <nav aria-label="breadcrumb">
+      <h6 class="font-weight-bolder text-white mb-0">Dashboard</h6>
+    </nav>
+    <div
+      class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4"
+      id="navbar"
+    >
+      <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+        <form action="/search/cosplayer" method="get">
+        <div class="input-group">
+          <span class="input-group-text text-body"
+            ><i class="fas fa-search" aria-hidden="true"></i
+          ></span>
+          <input type="text" class="form-control" name="search" placeholder="Type here..." />
+        </div>
+      </form>
+      </div>
+      <ul class="navbar-nav justify-content-end">
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+<div class="row">
+  <div class="col-12">
+    <div class="card mb-4">
+      <div class="card-header pb-0">
+        <div class="d-flex justify-content-between">
+          <h6>Cosplayer List</h6>
+          <button
+            type="button"
+            class="btn bg-gradient-primary"
+            data-bs-toggle="modal"
+            data-bs-target="#exampleModal"
+          >
+            Tambah Cosplayer
+          </button>
+        </div>
+      </div>
+      <div class="card-body px-0 pt-0 pb-2">
+        <div class="table-responsive p-0">
+          <table class="table align-items-center justify-content-center mb-0">
+            <thead>
+              <tr>
+                <th
+                  class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
+                >
+                  Nama Cosplayer
+                </th>
+                <th
+                  class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
+                >
+                  Nama Karakter
+                </th>
+                <th
+                  class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
+                >
+                  Nama Anime
+                </th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% cosplayers.forEach(cos => { %>
+              <tr>
+                <td>
+                  <div class="d-flex px-2">
+                    <div class="my-auto">
+                      <h6 class="mb-0 text-sm"><%= cos.nama_cosplayer %></h6>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <p class="text-sm font-weight-bold mb-0">
+                    <%- cos.nama_karakter %>
+                  </p>
+                </td>
+                <td>
+                  <p class="text-sm font-weight-bold mb-0">
+                    <%= cos.nama_anime %>
+                  </p>
+                </td>
+                <td class="">
+                  <button
+                    class="btn btn-warning"
+                    onclick="editEvent('<%= cos.id%>')"
+                  >
+                    Edit
+                  </button>
+                  <form action="/cosplayer/delete" method="post">
+                    <input type="hidden" value="<%= cos.id  %>" name="id" />
+                    <button type="submit" class="btn btn-danger">Hapus</button>
+                  </form>
+                </td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Tambah Cosplayer</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form
+        action="/cosplayer/store"
+        method="post"
+      >
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label for="namaCosplayer">Nama Cosplayer</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="namaCosplayer"
+                  name="namaCosplayer"
+                  placeholder="Wibu Fest"
+                />
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label for="namaKarakter">Nama Karakter</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="namaKarakter"
+                  name="namaKarakter"
+                  placeholder="Lutfi"
+                />
+              </div>
+            </div>
+            <div class="col-lg-12">
+              <div class="form-group">
+                <label for="namaAnime">Nama Anime</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="namaAnime"
+                  name="namaAnime"
+                  placeholder="Naruto"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn bg-gradient-secondary"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+          <button type="submit" class="btn bg-gradient-primary">
+            Save changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Initialize Quill editor -->
+<script>
+  function editEvent(id) {
+    fetch(`/cosplayer/${id}`)
+      .then((response) => response.json())
+      .then((res) => {
+        $("input[name='namaCosplayer']").val(res.nama_cosplayer);
+        $("input[name='namaKarakter']").val(res.nama_karakter);
+        $("input[name='namaAnime']").val(res.nama_anime);
+        $("#exampleModal form").attr("action", `/cosplayer/update/${id}`);
+        $("#exampleModal").modal("show");
+      })
+      .catch((error) => console.error("Error fetching event data:", error));
+  }
+</script>
+
+<% if(messages.success){ %>
+<script>
+  Toastify({
+    text: "<%= messages.success %>",
+    className: "success",
+    style: {
+      background: "linear-gradient(to right, #00b09b, #00b09b)",
+    },
+  }).showToast();
+</script>
+<% } %>

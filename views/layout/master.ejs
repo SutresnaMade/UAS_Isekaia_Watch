@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/dashboard/head'); %>
+  </head>
+
+  <body class="g-sidenav-show bg-gray-100">
+    <div class="min-height-300 bg-primary position-absolute w-100"></div>
+    <%- include('../partials/dashboard/aside'); %>
+    <main class="main-content position-relative border-radius-lg ps">
+      <!-- Navbar -->
+      <% include('../partials/dashboard/navbar'); %>
+      <!-- End Navbar -->
+      <div class="container-fluid py-4"><%- body %></div>
+    </main>
+    <!--   Core JS Files   -->
+    <script src="/dashboard/js/core/popper.min.js"></script>
+    <script src="/dashboard/js/core/bootstrap.min.js"></script>
+    <script src="/dashboard/js/plugins/perfect-scrollbar.min.js"></script>
+    <script src="/dashboard/js/plugins/smooth-scrollbar.min.js"></script>
+    <script src="/dashboard/js/plugins/chartjs.min.js"></script>
+    <script src="/dashboard/js/argon-dashboard.min.js?v=2.0.4"></script>
+  </body>
+</html>
